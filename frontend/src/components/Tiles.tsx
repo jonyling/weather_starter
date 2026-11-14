@@ -1,4 +1,13 @@
-import { CloudIcon, DropletIcon, SunIcon, ThermometerIcon, TrendIcon, WindIcon } from './icons';
+import {
+  CloudIcon,
+  DropletIcon,
+  MoonIcon,
+  SunIcon,
+  ThermometerIcon,
+  TrendIcon,
+  WindIcon,
+} from './icons';
+import { formatTime } from './format';
 import type { ReactNode } from 'react';
 import type { WeatherSnapshot } from '../types';
 
@@ -72,6 +81,43 @@ function airQualityLabel(psi: number | null | undefined): string {
   if (psi <= 200) return 'Unhealthy';
   if (psi <= 300) return 'Very Unhealthy';
   return 'Hazardous';
+}
+
+function ConditionIcon({ condition }: { condition: string | null | undefined }) {
+  const text = (condition ?? '').toLowerCase();
+  if (text.includes('rain') || text.includes('shower') || text.includes('thunder')) {
+    return <DropletIcon className="h-10 w-10 text-sky-300" />;
+  }
+  if (text.includes('windy')) return <WindIcon className="h-10 w-10 text-white/85" />;
+  if (text.includes('night')) return <MoonIcon className="h-10 w-10 text-indigo-200" />;
+  if (text.includes('fair') || text.includes('sunny')) {
+    return <SunIcon className="h-10 w-10 text-amber-300" />;
+  }
+  return <CloudIcon className="h-10 w-10 text-white/85" />;
+}
+
+export function ConditionTile({ weather }: WeatherProps) {
+  const condition = weather?.condition;
+  const available = Boolean(condition) && condition !== 'Unavailable';
+  const updated = formatTime(weather?.observed_at);
+
+  return (
+    <TileShell icon={<CloudIcon className="h-3.5 w-3.5" />} title="Conditions" className="col-span-2">
+      <div className="flex items-center gap-4">
+        <ConditionIcon condition={available ? condition : null} />
+        <div className="min-w-0">
+          <div className="text-2xl font-light leading-tight text-white/95">
+            {available ? condition : 'Unavailable'}
+          </div>
+          <div className="mt-1 text-sm text-white/80">{weather?.area ?? 'Nearest area'}</div>
+        </div>
+      </div>
+      <p className="mt-3 text-xs leading-snug text-white/70">
+        {weather?.valid_period_text ? `${weather.valid_period_text} · ` : ''}
+        2-hour forecast{updated ? ` · updated ${updated}` : ''}
+      </p>
+    </TileShell>
+  );
 }
 
 export function AirQualityTile({ weather }: WeatherProps) {
@@ -247,6 +293,7 @@ export function AveragesTile({ weather }: WeatherProps) {
 export function TileGrid({ weather }: WeatherProps) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <ConditionTile weather={weather} />
       <AirQualityTile weather={weather} />
       <WindTile weather={weather} />
       <UVTile weather={weather} />

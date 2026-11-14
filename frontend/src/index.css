@@ -8,12 +8,837 @@ body,
   height: 100%;
 }
 
-body {
-  @apply text-white antialiased;
-  background:
+/* Themes: each sets --app-bg on <html data-theme="...">. "apple" is the original design. */
+:root,
+:root[data-theme='apple'] {
+  --app-bg:
     radial-gradient(120% 80% at 70% 0%, rgba(255, 255, 255, 0.18) 0%, transparent 55%),
     radial-gradient(90% 70% at 10% 100%, rgba(80, 110, 150, 0.55) 0%, transparent 60%),
     linear-gradient(170deg, #6f8aa8 0%, #5a7591 35%, #4a627c 65%, #3c5066 100%);
+}
+
+/* Clear Sky: bright, friendly light theme. Components keep their white-on-glass utility
+   classes, so this block remaps them to light cards with slate text. Scoped to this theme only. */
+:root[data-theme='clear-sky'] {
+  --app-bg:
+    radial-gradient(60% 45% at 88% 0%, rgba(255, 214, 90, 0.55) 0%, transparent 70%),
+    linear-gradient(180deg, #4aa3e8 0%, #9bd0f5 45%, #eaf5fd 100%);
+}
+
+:root[data-theme='clear-sky'] body {
+  color: #1e293b;
+  font-family: 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* text: slate, with lighter levels for the old low-opacity whites */
+:root[data-theme='clear-sky'] [class*='text-white']:not([class*='bg-black']) {
+  color: #1e293b;
+}
+:root[data-theme='clear-sky']
+  :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) {
+  color: #64748b;
+}
+:root[data-theme='clear-sky'] [class*='text-white/7']:not([class*='bg-black']) {
+  color: #475569;
+}
+
+/* surfaces: white cards with a soft blue shadow */
+:root[data-theme='clear-sky'] :is([class*=' bg-white/'], [class^='bg-white/']) {
+  background-color: rgba(255, 255, 255, 0.78);
+}
+:root[data-theme='clear-sky'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+:root[data-theme='clear-sky'] [class~='bg-white/20'] {
+  background-color: #dbeeff;
+}
+:root[data-theme='clear-sky'] [class*=' bg-white/70'] {
+  background-color: #475569;
+}
+:root[data-theme='clear-sky'] [class*=' bg-white/90'] {
+  background-color: #2f7fd0;
+  color: #fff;
+}
+:root[data-theme='clear-sky'] aside {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(59, 130, 246, 0.15);
+}
+:root[data-theme='clear-sky'] [class~='rounded-2xl'] {
+  box-shadow: 0 4px 18px rgba(47, 127, 208, 0.14);
+}
+:root[data-theme='clear-sky'] [class*='border-white'],
+:root[data-theme='clear-sky'] [class*='divide-white'] > * {
+  border-color: rgba(59, 130, 246, 0.16);
+}
+:root[data-theme='clear-sky'] input {
+  color: #1e293b;
+}
+:root[data-theme='clear-sky'] input::placeholder {
+  color: #64748b;
+}
+:root[data-theme='clear-sky'] .text-amber-300 {
+  color: #f59e0b;
+}
+:root[data-theme='clear-sky'] .text-sky-300 {
+  color: #0ea5e9;
+}
+:root[data-theme='clear-sky'] .text-indigo-200 {
+  color: #6366f1;
+}
+:root[data-theme='clear-sky'] button:focus-visible,
+:root[data-theme='clear-sky'] input:focus-visible {
+  --tw-ring-color: rgba(47, 127, 208, 0.55);
+}
+/* light theme: use unmodified map tiles */
+:root[data-theme='clear-sky'] .wx-tiles {
+  filter: none;
+}
+:root[data-theme='clear-sky'] .leaflet-container {
+  background: #dbeeff;
+}
+
+/* Midnight Radar: dark meteorological console. Remaps the white-on-glass utility classes
+   to dark translucent panels with glowing cyan borders. Scoped to this theme only. */
+:root[data-theme='midnight'] {
+  --app-bg:
+    radial-gradient(70% 50% at 75% 0%, rgba(34, 211, 238, 0.12) 0%, transparent 70%),
+    radial-gradient(60% 40% at 10% 100%, rgba(74, 222, 128, 0.07) 0%, transparent 70%),
+    linear-gradient(170deg, #070d18 0%, #0a1424 55%, #050a12 100%);
+}
+:root[data-theme='midnight'] body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+/* numbers in monospace */
+:root[data-theme='midnight'] :is([class*='tabular-nums'], [class*='text-4xl'], [class*='text-3xl'], [class*='text-[6.5rem]']) {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+/* labels in neon cyan */
+:root[data-theme='midnight'] [class*='uppercase'] {
+  color: #22d3ee;
+  letter-spacing: 0.16em;
+}
+/* panels: dark, translucent, 1px glowing border, 4px radius */
+:root[data-theme='midnight'] :is([class*=' bg-white/'], [class^='bg-white/']) {
+  background-color: rgba(8, 20, 36, 0.62);
+}
+:root[data-theme='midnight'] [class~='bg-white/20'] {
+  background-color: rgba(34, 211, 238, 0.16);
+}
+:root[data-theme='midnight'] [class*=' bg-white/10'] {
+  background-color: rgba(34, 211, 238, 0.08);
+}
+:root[data-theme='midnight'] [class*=' bg-white/90'] {
+  background-color: #4ade80;
+  color: #04140a;
+}
+:root[data-theme='midnight'] [class*=' bg-white/70'] {
+  background-color: #22d3ee;
+}
+:root[data-theme='midnight'] [class~='rounded-2xl'] {
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.06), 0 0 14px rgba(34, 211, 238, 0.1);
+}
+:root[data-theme='midnight'] [class~='rounded-lg'],
+:root[data-theme='midnight'] [class~='rounded-md'] {
+  border-radius: 3px;
+}
+:root[data-theme='midnight'] [class*='border-white'],
+:root[data-theme='midnight'] [class*='divide-white'] > * {
+  border-color: rgba(34, 211, 238, 0.28);
+}
+:root[data-theme='midnight'] aside {
+  background-color: rgba(4, 9, 18, 0.7);
+  border-color: rgba(34, 211, 238, 0.2);
+}
+:root[data-theme='midnight'] [class*='border-red'] {
+  border-color: rgba(251, 191, 36, 0.45);
+  background-color: rgba(251, 191, 36, 0.12);
+}
+:root[data-theme='midnight'] [class*='text-red'] {
+  color: #fbbf24;
+}
+:root[data-theme='midnight'] button:focus-visible,
+:root[data-theme='midnight'] input:focus-visible {
+  --tw-ring-color: rgba(34, 211, 238, 0.7);
+}
+/* dense: tighter padding and gaps */
+:root[data-theme='midnight'] [class~='p-4'] { padding: 0.625rem; }
+:root[data-theme='midnight'] [class~='py-4'] { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+:root[data-theme='midnight'] [class~='py-3'] { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+:root[data-theme='midnight'] [class~='gap-3'] { gap: 0.5rem; }
+:root[data-theme='midnight'] [class~='px-4'] { padding-left: 0.75rem; padding-right: 0.75rem; }
+/* map pins */
+:root[data-theme='midnight'] .wx-pin__label {
+  border-radius: 3px;
+  border-color: rgba(34, 211, 238, 0.6);
+  background: rgba(6, 14, 26, 0.9);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.35);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+:root[data-theme='midnight'] .wx-pin__dot {
+  border-color: #4ade80;
+  box-shadow: 0 0 8px #4ade80;
+}
+:root[data-theme='midnight'] .wx-pin--selected .wx-pin__label {
+  background: rgba(34, 211, 238, 0.85);
+  color: #04141a;
+}
+
+/* Glass Horizon: frosted glass over a background that follows the selected location's
+   weather (html[data-weather] is set by ThemeSelector). Scoped to this theme only. */
+:root[data-theme='glass'] {
+  --app-bg:
+    radial-gradient(80% 50% at 75% 0%, rgba(255, 255, 255, 0.28) 0%, transparent 60%),
+    linear-gradient(170deg, #5db4f0 0%, #4a8fd8 50%, #3a6fc0 100%);
+}
+:root[data-theme='glass'][data-weather='cloudy'] {
+  --app-bg:
+    radial-gradient(80% 50% at 75% 0%, rgba(255, 255, 255, 0.25) 0%, transparent 60%),
+    linear-gradient(170deg, #9fb0c4 0%, #7f93ab 50%, #647891 100%);
+}
+:root[data-theme='glass'][data-weather='rain'] {
+  --app-bg:
+    radial-gradient(80% 50% at 75% 0%, rgba(180, 210, 240, 0.2) 0%, transparent 60%),
+    linear-gradient(170deg, #5f7790 0%, #455d78 50%, #2f4560 100%);
+}
+:root[data-theme='glass'][data-weather='storm'] {
+  --app-bg:
+    radial-gradient(70% 45% at 75% 0%, rgba(190, 170, 255, 0.22) 0%, transparent 60%),
+    linear-gradient(170deg, #4a4f78 0%, #323a5e 50%, #1d2342 100%);
+}
+:root[data-theme='glass'][data-weather='night'] {
+  --app-bg:
+    radial-gradient(70% 45% at 25% 0%, rgba(150, 170, 255, 0.2) 0%, transparent 60%),
+    linear-gradient(170deg, #26356e 0%, #1a2554 50%, #0f1738 100%);
+}
+:root[data-theme='glass'] body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-weight: 300;
+  transition: background 0.6s;
+}
+/* light weights, very large temperature */
+:root[data-theme='glass'] [class~='font-medium'] { font-weight: 400; }
+:root[data-theme='glass'] [class~='font-semibold'] { font-weight: 500; }
+:root[data-theme='glass'] [class~='font-light'] { font-weight: 200; }
+:root[data-theme='glass'] [class*='text-[6.5rem]'] {
+  font-size: 8.5rem;
+  font-weight: 100;
+}
+/* glass: backdrop blur, 24px radius, thin white border */
+:root[data-theme='glass'] [class~='rounded-2xl'] {
+  border-radius: 24px;
+  border-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  backdrop-filter: blur(28px) saturate(1.4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 32px rgba(10, 30, 70, 0.15);
+}
+:root[data-theme='glass'] [class~='bg-white/20'] {
+  background-color: rgba(255, 255, 255, 0.26);
+}
+:root[data-theme='glass'] aside {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+}
+:root[data-theme='glass'] [class~='rounded-full'][class*='border-white'] {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+/* airy: more space inside and between cards */
+:root[data-theme='glass'] [class~='p-4']:is(section, div) { padding: 1.25rem; }
+:root[data-theme='glass'] [class~='py-3'] { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+:root[data-theme='glass'] [class~='py-4'] { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+:root[data-theme='glass'] main [class~='gap-3'] { gap: 1.25rem; }
+:root[data-theme='glass'] aside [class~='gap-3'] { gap: 1rem; }
+:root[data-theme='glass'] aside [class~='gap-2'] { gap: 0.875rem; }
+/* text at 80-100% opacity: lift the dimmest whites */
+:root[data-theme='glass'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']) {
+  color: rgba(255, 255, 255, 0.8);
+}
+:root[data-theme='glass'] [class*='text-white/7'] {
+  color: rgba(255, 255, 255, 0.88);
+}
+/* map pins */
+:root[data-theme='glass'] .wx-pin__label {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+:root[data-theme='glass'] .wx-pin--selected .wx-pin__label {
+  background: rgba(255, 255, 255, 0.45);
+  color: #12304f;
+}
+:root[data-theme='glass'] .wx-pin--selected .wx-pin__cond {
+  color: #1e4468;
+}
+
+/* Paper Almanac: printed farmer's almanac. Cream paper, ink text, double-line rules, serif type.
+   Remaps the white-on-glass utility classes; scoped to this theme only. */
+:root[data-theme='almanac'] {
+  --app-bg:
+    radial-gradient(90% 60% at 50% 0%, rgba(255, 252, 240, 0.7) 0%, transparent 70%),
+    linear-gradient(180deg, #f4ebd9 0%, #eee2c6 100%);
+}
+:root[data-theme='almanac'] body {
+  color: #2b2118;
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+}
+/* headlines and big numerals in Playfair */
+:root[data-theme='almanac'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 400;
+}
+:root[data-theme='almanac'] [class*='text-[6.5rem]'] {
+  font-weight: 500;
+}
+/* labels: small caps instead of uppercase */
+:root[data-theme='almanac'] [class*='uppercase'] {
+  text-transform: none;
+  font-variant-caps: all-small-caps;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+/* ink text, with warm browns for the dimmer whites */
+:root[data-theme='almanac'] [class*='text-white']:not([class*='bg-black']) {
+  color: #2b2118;
+}
+:root[data-theme='almanac'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) {
+  color: #6b5a45;
+}
+:root[data-theme='almanac'] [class*='text-white/7']:not([class*='bg-black']) {
+  color: #4a3b2c;
+}
+/* flat paper surfaces with double-line borders and no shadow or blur */
+:root[data-theme='almanac'] :is([class*=' bg-white/'], [class^='bg-white/']) {
+  background-color: rgba(255, 251, 238, 0.55);
+}
+:root[data-theme='almanac'] [class~='bg-white/20'] {
+  background-color: #e8dab9;
+}
+:root[data-theme='almanac'] [class*=' bg-white/10'],
+:root[data-theme='almanac'] [class*=' bg-white/[0.04]'] {
+  background-color: rgba(43, 33, 24, 0.07);
+}
+:root[data-theme='almanac'] [class*=' bg-white/90'] {
+  background-color: #2f5d3a;
+  color: #f4ebd9;
+}
+:root[data-theme='almanac'] [class*=' bg-white/70'],
+:root[data-theme='almanac'] [class~='bg-white'] {
+  background-color: #2b2118;
+}
+:root[data-theme='almanac'] [class*='backdrop-blur'] {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+:root[data-theme='almanac'] [class~='rounded-2xl'] {
+  border-radius: 2px;
+  border-style: double;
+  border-width: 3px;
+  box-shadow: none;
+}
+:root[data-theme='almanac'] [class~='rounded-lg'],
+:root[data-theme='almanac'] [class~='rounded-md'],
+:root[data-theme='almanac'] [class~='rounded-full'][class*='border-white'] {
+  border-radius: 2px;
+}
+:root[data-theme='almanac'] [class*='border-white'],
+:root[data-theme='almanac'] [class*='divide-white'] > * {
+  border-color: rgba(43, 33, 24, 0.55);
+}
+:root[data-theme='almanac'] [class*='divide-white'] > * {
+  border-color: rgba(43, 33, 24, 0.25);
+}
+:root[data-theme='almanac'] [class*='border-b'][class*='border-white'] {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+:root[data-theme='almanac'] aside {
+  background-color: rgba(228, 214, 183, 0.55);
+  border-right: 3px double rgba(43, 33, 24, 0.55);
+}
+:root[data-theme='almanac'] input {
+  color: #2b2118;
+}
+:root[data-theme='almanac'] input::placeholder {
+  color: #6b5a45;
+}
+:root[data-theme='almanac'] [class*='border-red'] {
+  border-color: #9b3d33;
+  background-color: rgba(155, 61, 51, 0.1);
+}
+:root[data-theme='almanac'] [class*='text-red'] {
+  color: #8c2f26;
+}
+:root[data-theme='almanac'] button:focus-visible,
+:root[data-theme='almanac'] input:focus-visible {
+  --tw-ring-color: rgba(47, 93, 58, 0.7);
+}
+:root[data-theme='almanac'] .text-amber-300 { color: #a8402f; }
+:root[data-theme='almanac'] .text-sky-300 { color: #2f5d3a; }
+:root[data-theme='almanac'] .text-indigo-200 { color: #2b2118; }
+/* temperature range bar: faded green to faded red */
+:root[data-theme='almanac'] [class*='from-sky-300'] {
+  background-image: linear-gradient(to right, #2f5d3a, #b08a3a, #a8402f);
+}
+/* map: sepia tiles on paper */
+:root[data-theme='almanac'] .wx-tiles {
+  filter: sepia(0.75) saturate(0.8) contrast(0.95) brightness(1.02);
+}
+:root[data-theme='almanac'] .leaflet-container {
+  background: #e8dab9;
+}
+:root[data-theme='almanac'] .wx-pin__label {
+  border-radius: 2px;
+  border: 2px double #2b2118;
+  background: #f4ebd9;
+  color: #2b2118;
+  box-shadow: none;
+  font-family: 'Lora', Georgia, serif;
+}
+:root[data-theme='almanac'] .wx-pin__cond {
+  color: #6b5a45;
+}
+:root[data-theme='almanac'] .wx-pin__dot {
+  background: #f4ebd9;
+  border-color: #a8402f;
+  box-shadow: none;
+}
+:root[data-theme='almanac'] .wx-pin--selected .wx-pin__label {
+  background: #2f5d3a;
+  border-color: #f4ebd9;
+  color: #f4ebd9;
+}
+:root[data-theme='almanac'] .wx-pin--selected .wx-pin__cond {
+  color: #e8dab9;
+}
+
+/* ===== More themes (scoped; remap the white-on-glass utility classes) ===== */
+/* Neo-Brutalist: loud blocks, hard shadows, thick black borders */
+:root[data-theme='brutal'] { --app-bg: #f5f1e8; }
+:root[data-theme='brutal'] body { color: #000; font-family: 'Space Grotesk', system-ui, sans-serif;  }
+:root[data-theme='brutal'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: 'Archivo Black', 'Space Grotesk', sans-serif;  }
+:root[data-theme='brutal'] [class*='text-white']:not([class*='bg-black']) { color: #000; }
+:root[data-theme='brutal'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #333; }
+:root[data-theme='brutal'] [class*='text-white/7']:not([class*='bg-black']) { color: #111; }
+:root[data-theme='brutal'] [class*='uppercase'] { color:#000; font-weight:700; letter-spacing:.08em; }
+:root[data-theme='brutal'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: #fff; }
+:root[data-theme='brutal'] [class~='bg-white/20'] { background-color: #ffe14d; }
+:root[data-theme='brutal'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: #eee; }
+:root[data-theme='brutal'] [class*=' bg-white/90'] { background-color: #000; color: #ffe14d; }
+:root[data-theme='brutal'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #000; }
+:root[data-theme='brutal'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='brutal'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: #000; }
+:root[data-theme='brutal'] [class~='rounded-2xl'] { border-radius: 0; border-style: solid; border-width: 3px; box-shadow: 5px 5px 0 #000;  }
+:root[data-theme='brutal'] aside { background-color: #ffe14d; border-right:3px solid #000; }
+:root[data-theme='brutal'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 0; }
+:root[data-theme='brutal'] input { color: #000; }
+:root[data-theme='brutal'] input::placeholder { color: #555; }
+:root[data-theme='brutal'] [class*='border-red'] { border-color: #000; background-color: #ff8fc7; }
+:root[data-theme='brutal'] [class*='text-red'] { color: #000; }
+:root[data-theme='brutal'] :is(button, input):focus-visible { --tw-ring-color: #000; }
+:root[data-theme='brutal'] .text-amber-300 { color: #ff6b00; }
+:root[data-theme='brutal'] .text-sky-300 { color: #1d4ed8; }
+:root[data-theme='brutal'] .text-indigo-200 { color: #000; }
+:root[data-theme='brutal'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#1d4ed8,#ffe14d,#ff3d7f); }
+:root[data-theme='brutal'] .wx-tiles { filter: grayscale(1) contrast(1.15); }
+:root[data-theme='brutal'] .leaflet-container { background: #ddd; }
+:root[data-theme='brutal'] .wx-pin__label { border-radius:0; border:3px solid #000; background:#fff; color:#000; box-shadow:3px 3px 0 #000; font-family:"Space Grotesk",sans-serif; font-weight:700; }
+:root[data-theme='brutal'] .wx-pin__cond { color: #333; }
+:root[data-theme='brutal'] .wx-pin__dot { border-color:#ff3d7f; box-shadow:none; }
+:root[data-theme='brutal'] .wx-pin--selected .wx-pin__label { background:#ffe14d; color:#000; border-color:#000; }
+:root[data-theme='brutal'] .wx-pin--selected .wx-pin__cond { color: #000; }
+:root[data-theme='brutal'] [class*='text-[6.5rem]'] { font-size: 7rem; font-weight: 400; letter-spacing: -.03em; }
+:root[data-theme='brutal'] main [class~='rounded-2xl']:nth-child(3n+2) { background-color: #ff8fc7; }
+:root[data-theme='brutal'] main [class~='rounded-2xl']:nth-child(3n+3) { background-color: #7cc4ff; }
+:root[data-theme='brutal'] main [class~='rounded-2xl']:nth-child(3n+4) { background-color: #ffe14d; }
+:root[data-theme='brutal'] [class~='rounded-full'][class*='border-white'] { border-radius:0; border-width:3px; box-shadow:3px 3px 0 #000; }
+:root[data-theme='brutal'] [class~='shadow-lg'] { box-shadow: 5px 5px 0 #000; }
+
+/* Aurora: polar night with teal-violet-green gradient borders */
+:root[data-theme='aurora'] { --app-bg: radial-gradient(70% 50% at 20% 0%, rgba(45,212,191,.28) 0%, transparent 65%), radial-gradient(70% 50% at 85% 10%, rgba(139,92,246,.3) 0%, transparent 65%), linear-gradient(180deg,#0a0d2e 0%,#0d1238 60%,#060820 100%); }
+:root[data-theme='aurora'] body { color: #fff; font-family: 'Outfit', system-ui, sans-serif; font-weight:300; }
+:root[data-theme='aurora'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit;  }
+:root[data-theme='aurora'] [class*='uppercase'] { color:#5eead4; }
+:root[data-theme='aurora'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: #0f1436; }
+:root[data-theme='aurora'] [class~='bg-white/20'] { background-color: #1b2060; }
+:root[data-theme='aurora'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(139,92,246,.16); }
+:root[data-theme='aurora'] [class*=' bg-white/90'] { background-color: #2dd4bf; color: #04141a; }
+:root[data-theme='aurora'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: rgba(255,255,255,.7); }
+:root[data-theme='aurora'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='aurora'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: transparent; }
+:root[data-theme='aurora'] [class~='rounded-2xl'] { border-radius: 20px; border-style: solid; border-width: 1px; box-shadow: 0 0 28px rgba(139,92,246,.22); border-color:transparent; background-image: linear-gradient(#0f1436,#0f1436), linear-gradient(135deg,#2dd4bf,#8b5cf6,#4ade80); background-origin:border-box; background-clip:padding-box,border-box; }
+:root[data-theme='aurora'] aside { background-color: rgba(6,8,32,.55); border-color:rgba(139,92,246,.3); }
+:root[data-theme='aurora'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 6px; }
+:root[data-theme='aurora'] input { color: inherit; }
+:root[data-theme='aurora'] input::placeholder { color: inherit; }
+:root[data-theme='aurora'] [class*='border-red'] { border-color: rgba(252,165,165,.3); background-color: rgba(239,68,68,.15); }
+:root[data-theme='aurora'] [class*='text-red'] { color: #fee2e2; }
+:root[data-theme='aurora'] :is(button, input):focus-visible { --tw-ring-color: rgba(45,212,191,.7); }
+:root[data-theme='aurora'] .text-amber-300 { color: #fde68a; }
+:root[data-theme='aurora'] .text-sky-300 { color: #5eead4; }
+:root[data-theme='aurora'] .text-indigo-200 { color: #c4b5fd; }
+:root[data-theme='aurora'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#2dd4bf,#8b5cf6,#4ade80); }
+:root[data-theme='aurora'] .wx-tiles { filter: invert(1) hue-rotate(180deg) brightness(.9) contrast(.85) saturate(.6); }
+:root[data-theme='aurora'] .leaflet-container { background: #1c2530; }
+:root[data-theme='aurora'] .wx-pin__label { background:#0f1436; border-color:#8b5cf6; box-shadow:0 0 14px rgba(139,92,246,.5); }
+:root[data-theme='aurora'] .wx-pin__cond { color: rgba(255,255,255,.75); }
+:root[data-theme='aurora'] .wx-pin__dot { border-color:#2dd4bf; box-shadow:0 0 10px #2dd4bf; }
+:root[data-theme='aurora'] .wx-pin--selected .wx-pin__label { background:linear-gradient(135deg,#2dd4bf,#8b5cf6); border-color:#fff; }
+:root[data-theme='aurora'] .wx-pin--selected .wx-pin__cond { color: rgba(255,255,255,.9); }
+:root[data-theme='aurora'] [class~='p-4'] { padding: 1.25rem; }
+:root[data-theme='aurora'] [class~='py-3'] { padding-top: .875rem; padding-bottom: .875rem; }
+:root[data-theme='aurora'] [class~='py-4'] { padding-top: 1.125rem; padding-bottom: 1.125rem; }
+:root[data-theme='aurora'] [class~='px-4'] { padding-left: 1.25rem; padding-right: 1.25rem; }
+:root[data-theme='aurora'] main [class~='gap-3'] { gap: 1.125rem; }
+:root[data-theme='aurora'] [class~='rounded-2xl'][class~='shadow-lg'] { background-image: linear-gradient(#1b2060,#1b2060), linear-gradient(135deg,#2dd4bf,#8b5cf6,#4ade80); }
+:root[data-theme='aurora'] [class~='font-light'] { font-weight: 200; }
+
+/* Terminal Forecast: phosphor-green CLI readout, dense and monospaced */
+:root[data-theme='terminal'] { --app-bg: radial-gradient(90% 60% at 50% 0%, rgba(74,222,128,.06) 0%, transparent 70%), #050805; }
+:root[data-theme='terminal'] body { color: #4ade80; font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; text-shadow:0 0 6px rgba(74,222,128,.35); }
+:root[data-theme='terminal'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit;  }
+:root[data-theme='terminal'] [class*='text-white']:not([class*='bg-black']) { color: #4ade80; }
+:root[data-theme='terminal'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #22a05a; }
+:root[data-theme='terminal'] [class*='text-white/7']:not([class*='bg-black']) { color: #3bc070; }
+:root[data-theme='terminal'] [class*='uppercase'] { color:#fbbf24; letter-spacing:.1em; }
+:root[data-theme='terminal'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: rgba(0,24,6,.4); }
+:root[data-theme='terminal'] [class~='bg-white/20'] { background-color: rgba(74,222,128,.16); }
+:root[data-theme='terminal'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(74,222,128,.08); }
+:root[data-theme='terminal'] [class*=' bg-white/90'] { background-color: #4ade80; color: #021006; }
+:root[data-theme='terminal'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #4ade80; }
+:root[data-theme='terminal'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='terminal'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: rgba(74,222,128,.45); }
+:root[data-theme='terminal'] [class~='rounded-2xl'] { border-radius: 0; border-style: dashed; border-width: 1px; box-shadow: none;  }
+:root[data-theme='terminal'] aside { background-color: rgba(0,10,2,.85); border-right:1px dashed rgba(74,222,128,.45); }
+:root[data-theme='terminal'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 0; }
+:root[data-theme='terminal'] input { color: #4ade80; }
+:root[data-theme='terminal'] input::placeholder { color: #22a05a; }
+:root[data-theme='terminal'] [class*='border-red'] { border-color: #ef4444; background-color: rgba(239,68,68,.12); }
+:root[data-theme='terminal'] [class*='text-red'] { color: #fca5a5; }
+:root[data-theme='terminal'] :is(button, input):focus-visible { --tw-ring-color: rgba(74,222,128,.7); }
+:root[data-theme='terminal'] .text-amber-300 { color: #fbbf24; }
+:root[data-theme='terminal'] .text-sky-300 { color: #4ade80; }
+:root[data-theme='terminal'] .text-indigo-200 { color: #4ade80; }
+:root[data-theme='terminal'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#22a05a,#fbbf24,#ef4444); }
+:root[data-theme='terminal'] .wx-tiles { filter: grayscale(1) invert(1) brightness(.7) sepia(1) hue-rotate(80deg) saturate(2.5); }
+:root[data-theme='terminal'] .leaflet-container { background: #050805; }
+:root[data-theme='terminal'] .wx-pin__label { border-radius:0; border:1px solid #4ade80; background:#021006; color:#4ade80; box-shadow:none; font-family:"IBM Plex Mono",monospace; }
+:root[data-theme='terminal'] .wx-pin__cond { color: #22a05a; }
+:root[data-theme='terminal'] .wx-pin__dot { border-color:#4ade80; box-shadow:none; }
+:root[data-theme='terminal'] .wx-pin--selected .wx-pin__label { background:#4ade80; color:#021006; }
+:root[data-theme='terminal'] .wx-pin--selected .wx-pin__cond { color: #021006; }
+:root[data-theme='terminal'] [class~='p-4'] { padding: .5rem; }
+:root[data-theme='terminal'] [class~='py-3'] { padding-top: .3rem; padding-bottom: .3rem; }
+:root[data-theme='terminal'] [class~='py-4'] { padding-top: .4rem; padding-bottom: .4rem; }
+:root[data-theme='terminal'] [class~='px-4'] { padding-left: .625rem; padding-right: .625rem; }
+:root[data-theme='terminal'] main [class~='gap-3'] { gap: .5rem; }
+:root[data-theme='terminal'] [class*='text-[6.5rem]'] { font-size: 5rem; font-weight: 300; }
+:root[data-theme='terminal'] :is(h1, [class*='text-4xl']) { font-weight: 500; }
+:root[data-theme='terminal'] [class*='text-4xl'] { font-size: 2rem; }
+:root[data-theme='terminal'] [class~='font-light'], :root[data-theme='terminal'] [class~='font-extralight'] { font-weight: 300; }
+:root[data-theme='terminal'] [class~='rounded-full'][class*='border-white'] { border-radius: 0; }
+
+/* Pastel Cloud: soft rounded shapes in pink, lavender, mint and butter */
+:root[data-theme='pastel'] { --app-bg: radial-gradient(70% 45% at 85% 0%, rgba(255,243,196,.9) 0%, transparent 70%), radial-gradient(60% 40% at 5% 100%, rgba(216,245,230,.9) 0%, transparent 70%), linear-gradient(170deg,#ffe0ec 0%,#e8dcff 55%,#d9f0ff 100%); }
+:root[data-theme='pastel'] body { color: #5b4b6b; font-family: 'Quicksand', system-ui, sans-serif;  }
+:root[data-theme='pastel'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: 'Fredoka', 'Quicksand', sans-serif;  }
+:root[data-theme='pastel'] [class*='text-white']:not([class*='bg-black']) { color: #5b4b6b; }
+:root[data-theme='pastel'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #9a8aad; }
+:root[data-theme='pastel'] [class*='text-white/7']:not([class*='bg-black']) { color: #7a6a8d; }
+:root[data-theme='pastel'] [class*='uppercase'] { }
+:root[data-theme='pastel'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: rgba(255,255,255,.72); }
+:root[data-theme='pastel'] [class~='bg-white/20'] { background-color: #e8dcff; }
+:root[data-theme='pastel'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(183,156,240,.16); }
+:root[data-theme='pastel'] [class*=' bg-white/90'] { background-color: #b79cf0; color: #fff; }
+:root[data-theme='pastel'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #7a6a8d; }
+:root[data-theme='pastel'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='pastel'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: transparent; }
+:root[data-theme='pastel'] [class~='rounded-2xl'] { border-radius: 28px; border-style: solid; border-width: 0px; box-shadow: 0 8px 24px rgba(183,156,240,.2);  }
+:root[data-theme='pastel'] aside { background-color: rgba(255,255,255,.35); border-color:rgba(183,156,240,.2); }
+:root[data-theme='pastel'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 14px; }
+:root[data-theme='pastel'] input { color: #5b4b6b; }
+:root[data-theme='pastel'] input::placeholder { color: #9a8aad; }
+:root[data-theme='pastel'] [class*='border-red'] { border-color: #f0a0b4; background-color: #ffe0ec; }
+:root[data-theme='pastel'] [class*='text-red'] { color: #a0405a; }
+:root[data-theme='pastel'] :is(button, input):focus-visible { --tw-ring-color: rgba(183,156,240,.7); }
+:root[data-theme='pastel'] .text-amber-300 { color: #f5a524; }
+:root[data-theme='pastel'] .text-sky-300 { color: #6ab6e8; }
+:root[data-theme='pastel'] .text-indigo-200 { color: #8b7bd8; }
+:root[data-theme='pastel'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#9fd8f5,#ffd966,#ff9ec0); }
+:root[data-theme='pastel'] .wx-tiles { filter: saturate(.6) brightness(1.08) hue-rotate(-10deg); }
+:root[data-theme='pastel'] .leaflet-container { background: #e8dcff; }
+:root[data-theme='pastel'] .wx-pin__label { border-radius:18px; border:2px solid #fff; background:#fff; color:#5b4b6b; box-shadow:0 4px 12px rgba(183,156,240,.35); }
+:root[data-theme='pastel'] .wx-pin__cond { color: #9a8aad; }
+:root[data-theme='pastel'] .wx-pin__dot { border-color:#b79cf0; box-shadow:none; }
+:root[data-theme='pastel'] .wx-pin--selected .wx-pin__label { background:#b79cf0; color:#fff; }
+:root[data-theme='pastel'] .wx-pin--selected .wx-pin__cond { color: #fff; }
+:root[data-theme='pastel'] [class~='p-4'] { padding: 1.5rem; }
+:root[data-theme='pastel'] [class~='py-3'] { padding-top: 1rem; padding-bottom: 1rem; }
+:root[data-theme='pastel'] [class~='py-4'] { padding-top: 1.375rem; padding-bottom: 1.375rem; }
+:root[data-theme='pastel'] [class~='px-4'] { padding-left: 1.5rem; padding-right: 1.5rem; }
+:root[data-theme='pastel'] main [class~='gap-3'] { gap: 1.25rem; }
+:root[data-theme='pastel'] main [class~='rounded-2xl']:nth-child(4n+2) { background-color: rgba(255,224,236,.85); }
+:root[data-theme='pastel'] main [class~='rounded-2xl']:nth-child(4n+3) { background-color: rgba(216,245,230,.85); }
+:root[data-theme='pastel'] main [class~='rounded-2xl']:nth-child(4n+4) { background-color: rgba(255,243,196,.9); }
+:root[data-theme='pastel'] [class~='rounded-full'][class*='border-white'] { border-width:0; }
+:root[data-theme='pastel'] [class~='shadow-lg'] { box-shadow: 0 8px 24px rgba(183,156,240,.2); }
+
+/* Swiss Minimal: strict grid, rules not cards, huge numerals, one red accent */
+:root[data-theme='swiss'] { --app-bg: #fff; }
+:root[data-theme='swiss'] body { color: #000; font-family: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif; letter-spacing:-.01em; }
+:root[data-theme='swiss'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit;  }
+:root[data-theme='swiss'] [class*='text-white']:not([class*='bg-black']) { color: #000; }
+:root[data-theme='swiss'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #666; }
+:root[data-theme='swiss'] [class*='text-white/7']:not([class*='bg-black']) { color: #333; }
+:root[data-theme='swiss'] [class*='uppercase'] { color:#000; font-weight:700; letter-spacing:.12em; }
+:root[data-theme='swiss'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: transparent; }
+:root[data-theme='swiss'] [class~='bg-white/20'] { background-color: #f1f1f1; }
+:root[data-theme='swiss'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: #f1f1f1; }
+:root[data-theme='swiss'] [class*=' bg-white/90'] { background-color: #e30613; color: #fff; }
+:root[data-theme='swiss'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #e30613; }
+:root[data-theme='swiss'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='swiss'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: #000; }
+:root[data-theme='swiss'] [class~='rounded-2xl'] { border-radius: 0; border-style: solid; border-width: 0px; box-shadow: none; border-top:2px solid #000; }
+:root[data-theme='swiss'] aside { background-color: #fff; border-right:2px solid #000; }
+:root[data-theme='swiss'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 0; }
+:root[data-theme='swiss'] input { color: #000; }
+:root[data-theme='swiss'] input::placeholder { color: #666; }
+:root[data-theme='swiss'] [class*='border-red'] { border-color: #e30613; background-color: #fff; }
+:root[data-theme='swiss'] [class*='text-red'] { color: #e30613; }
+:root[data-theme='swiss'] :is(button, input):focus-visible { --tw-ring-color: #e30613; }
+:root[data-theme='swiss'] .text-amber-300 { color: #e30613; }
+:root[data-theme='swiss'] .text-sky-300 { color: #000; }
+:root[data-theme='swiss'] .text-indigo-200 { color: #000; }
+:root[data-theme='swiss'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#000,#000); }
+:root[data-theme='swiss'] .wx-tiles { filter: grayscale(1) contrast(1.05) brightness(1.05); }
+:root[data-theme='swiss'] .leaflet-container { background: #eee; }
+:root[data-theme='swiss'] .wx-pin__label { border-radius:0; border:1px solid #000; background:#fff; color:#000; box-shadow:none; }
+:root[data-theme='swiss'] .wx-pin__cond { color: #666; }
+:root[data-theme='swiss'] .wx-pin__dot { border-color:#e30613; box-shadow:none; }
+:root[data-theme='swiss'] .wx-pin--selected .wx-pin__label { background:#e30613; color:#fff; border-color:#e30613; }
+:root[data-theme='swiss'] .wx-pin--selected .wx-pin__cond { color: #fff; }
+:root[data-theme='swiss'] [class*='text-[6.5rem]'] { font-size: 9rem; font-weight: 700; letter-spacing: -.06em; }
+:root[data-theme='swiss'] h1 { font-weight: 700; letter-spacing: -.03em; }
+:root[data-theme='swiss'] [class~='shadow-lg'] { box-shadow: none; border-left: 4px solid #e30613; }
+:root[data-theme='swiss'] [class~='rounded-2xl'] { border-bottom: 1px solid rgba(0,0,0,.15); }
+:root[data-theme='swiss'] [class~='rounded-full'][class*='border-white'] { border-width:2px; border-color:#000; }
+:root[data-theme='swiss'] [class~='border-b'] { border-bottom-width: 1px; border-bottom-style: solid; border-color:#000; }
+
+/* Storm Front: moody charcoal, clipped corners, severity stripe */
+:root[data-theme='storm'] { --app-bg: radial-gradient(70% 45% at 80% 0%, rgba(250,204,21,.07) 0%, transparent 65%), linear-gradient(170deg,#262b33 0%,#1a1d23 60%,#101216 100%); }
+:root[data-theme='storm'] body { color: #fff; font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; font-size:1.06em; font-weight:500; }
+:root[data-theme='storm'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: 'Barlow Condensed', sans-serif; text-transform:uppercase; font-weight:700; }
+:root[data-theme='storm'] [class*='uppercase'] { color:#facc15; letter-spacing:.14em; font-weight:700; }
+:root[data-theme='storm'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: rgba(38,43,52,.92); }
+:root[data-theme='storm'] [class~='bg-white/20'] { background-color: rgba(250,204,21,.14); }
+:root[data-theme='storm'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(148,163,184,.14); }
+:root[data-theme='storm'] [class*=' bg-white/90'] { background-color: #facc15; color: #111; }
+:root[data-theme='storm'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: rgba(255,255,255,.7); }
+:root[data-theme='storm'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='storm'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: rgba(148,163,184,.3); }
+:root[data-theme='storm'] [class~='rounded-2xl'] { border-radius: 0; border-style: solid; border-width: 1px; box-shadow: none; border-left:4px solid var(--sev); clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px)); }
+:root[data-theme='storm'] aside { background-color: rgba(10,12,15,.65); border-color:rgba(148,163,184,.25); }
+:root[data-theme='storm'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 2px; }
+:root[data-theme='storm'] input { color: inherit; }
+:root[data-theme='storm'] input::placeholder { color: inherit; }
+:root[data-theme='storm'] [class*='border-red'] { border-color: #ef4444; background-color: rgba(239,68,68,.18); }
+:root[data-theme='storm'] [class*='text-red'] { color: #fecaca; }
+:root[data-theme='storm'] :is(button, input):focus-visible { --tw-ring-color: rgba(250,204,21,.8); }
+:root[data-theme='storm'] .text-amber-300 { color: #facc15; }
+:root[data-theme='storm'] .text-sky-300 { color: #7dd3fc; }
+:root[data-theme='storm'] .text-indigo-200 { color: #a5b4fc; }
+:root[data-theme='storm'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#64748b,#facc15,#ef4444); }
+:root[data-theme='storm'] .wx-tiles { filter: invert(1) hue-rotate(180deg) brightness(.9) contrast(.85) saturate(.6); }
+:root[data-theme='storm'] .leaflet-container { background: #1c2530; }
+:root[data-theme='storm'] .wx-pin__label { border-radius:0; border-color:#94a3b8; background:#1a1d23; clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px)); box-shadow:none; }
+:root[data-theme='storm'] .wx-pin__cond { color: rgba(255,255,255,.75); }
+:root[data-theme='storm'] .wx-pin__dot { border-color:#facc15; }
+:root[data-theme='storm'] .wx-pin--selected .wx-pin__label { background:#facc15; color:#111; border-color:#111; }
+:root[data-theme='storm'] .wx-pin--selected .wx-pin__cond { color: #222; }
+:root[data-theme='storm'] [class~='p-4'] { padding: .75rem; }
+:root[data-theme='storm'] [class~='py-3'] { padding-top: .5rem; padding-bottom: .5rem; }
+:root[data-theme='storm'] [class~='py-4'] { padding-top: .75rem; padding-bottom: .75rem; }
+:root[data-theme='storm'] [class~='px-4'] { padding-left: .875rem; padding-right: .875rem; }
+:root[data-theme='storm'] main [class~='gap-3'] { gap: .625rem; }
+:root[data-theme='storm'] { --sev: #94a3b8; }
+:root[data-theme='storm'][data-weather='clear'] { --sev: #facc15; }
+:root[data-theme='storm'][data-weather='rain'] { --sev: #38bdf8; }
+:root[data-theme='storm'][data-weather='storm'] { --sev: #ef4444; }
+:root[data-theme='storm'][data-weather='night'] { --sev: #818cf8; }
+:root[data-theme='storm'] [class*='text-[6.5rem]'] { font-weight: 600; }
+:root[data-theme='storm'] [class~='rounded-full'][class*='border-white'] { border-radius: 0; }
+
+/* Sunset Gradient: golden-hour gradient with warm glowing cards */
+:root[data-theme='sunset'] { --app-bg: radial-gradient(120% 70% at 75% 0%, rgba(255,220,160,.45) 0%, transparent 60%), linear-gradient(170deg,#f2a65a 0%,#e0687a 40%,#a14f8f 70%,#4f3a7a 100%); }
+:root[data-theme='sunset'] body { color: #fff4e6; font-family: 'Poppins', system-ui, sans-serif;  }
+:root[data-theme='sunset'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit;  }
+:root[data-theme='sunset'] [class*='text-white']:not([class*='bg-black']) { color: #fff4e6; }
+:root[data-theme='sunset'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: rgba(255,244,230,.78); }
+:root[data-theme='sunset'] [class*='text-white/7']:not([class*='bg-black']) { color: rgba(255,244,230,.9); }
+:root[data-theme='sunset'] [class*='uppercase'] { }
+:root[data-theme='sunset'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: rgba(255,236,214,.16); }
+:root[data-theme='sunset'] [class~='bg-white/20'] { background-color: rgba(255,236,214,.3); }
+:root[data-theme='sunset'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(255,236,214,.14); }
+:root[data-theme='sunset'] [class*=' bg-white/90'] { background-color: #fff4e6; color: #7a2e5a; }
+:root[data-theme='sunset'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #fff4e6; }
+:root[data-theme='sunset'] [class*='backdrop-blur'] { -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+:root[data-theme='sunset'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: rgba(255,230,200,.4); }
+:root[data-theme='sunset'] [class~='rounded-2xl'] { border-radius: 20px; border-style: solid; border-width: 1px; box-shadow: inset 0 0 28px rgba(255,200,150,.16), 0 8px 28px rgba(110,30,70,.2);  }
+:root[data-theme='sunset'] aside { background-color: rgba(90,30,80,.22); border-color:rgba(255,230,200,.2); }
+:root[data-theme='sunset'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 6px; }
+:root[data-theme='sunset'] input { color: #fff4e6; }
+:root[data-theme='sunset'] input::placeholder { color: rgba(255,244,230,.65); }
+:root[data-theme='sunset'] [class*='border-red'] { border-color: rgba(252,165,165,.3); background-color: rgba(239,68,68,.15); }
+:root[data-theme='sunset'] [class*='text-red'] { color: #fee2e2; }
+:root[data-theme='sunset'] :is(button, input):focus-visible { --tw-ring-color: rgba(255,244,230,.7); }
+:root[data-theme='sunset'] .text-amber-300 { color: #ffe08a; }
+:root[data-theme='sunset'] .text-sky-300 { color: #ffd0a0; }
+:root[data-theme='sunset'] .text-indigo-200 { color: #ffd6f0; }
+:root[data-theme='sunset'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#ffe08a,#ff9e6b,#ff6b9a); }
+:root[data-theme='sunset'] .wx-tiles { filter: sepia(.4) saturate(.8) brightness(.95) hue-rotate(-15deg); }
+:root[data-theme='sunset'] .leaflet-container { background: #7a4a7a; }
+:root[data-theme='sunset'] .wx-pin__label { background:rgba(110,40,80,.78); border-color:rgba(255,230,200,.5); border-radius:16px; }
+:root[data-theme='sunset'] .wx-pin__cond { color: rgba(255,255,255,.75); }
+:root[data-theme='sunset'] .wx-pin__dot { border-color:#ff9e6b; }
+:root[data-theme='sunset'] .wx-pin--selected .wx-pin__label { background:rgba(255,160,110,.95); }
+:root[data-theme='sunset'] .wx-pin--selected .wx-pin__cond { color: rgba(255,255,255,.9); }
+:root[data-theme='sunset'] [class*='text-[6.5rem]'] { font-size: 6rem; font-weight: 600; letter-spacing: -.03em; }
+:root[data-theme='sunset'] [class~='font-light'], :root[data-theme='sunset'] [class~='font-extralight'] { font-weight: 300; }
+:root[data-theme='sunset'] [class~='shadow-lg'] { box-shadow: inset 0 0 28px rgba(255,200,150,.22), 0 8px 28px rgba(110,30,70,.25); }
+
+/* Isometric Atlas: cartographic map-sheet panels, topo beige, ocean teal */
+:root[data-theme='atlas'] { --app-bg: repeating-radial-gradient(circle at 20% 30%, transparent 0 34px, rgba(139,107,67,.09) 34px 35px), repeating-radial-gradient(circle at 85% 75%, transparent 0 46px, rgba(139,107,67,.08) 46px 47px), #efe6d2; }
+:root[data-theme='atlas'] body { color: #3b2f1e; font-family: 'DM Sans', system-ui, sans-serif;  }
+:root[data-theme='atlas'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit;  }
+:root[data-theme='atlas'] [class*='text-white']:not([class*='bg-black']) { color: #3b2f1e; }
+:root[data-theme='atlas'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #8a7656; }
+:root[data-theme='atlas'] [class*='text-white/7']:not([class*='bg-black']) { color: #5b4a32; }
+:root[data-theme='atlas'] [class*='uppercase'] { text-transform:none; font-variant-caps:all-small-caps; font-size:.9rem; letter-spacing:.12em; color:#1f7a8c; }
+:root[data-theme='atlas'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: rgba(250,244,230,.88); }
+:root[data-theme='atlas'] [class~='bg-white/20'] { background-color: #cfe5e8; }
+:root[data-theme='atlas'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(31,122,140,.1); }
+:root[data-theme='atlas'] [class*=' bg-white/90'] { background-color: #1f7a8c; color: #fff; }
+:root[data-theme='atlas'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #b5651d; }
+:root[data-theme='atlas'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='atlas'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: #8b6b43; }
+:root[data-theme='atlas'] [class~='rounded-2xl'] { border-radius: 2px; border-style: solid; border-width: 1px; box-shadow: 0 1px 0 rgba(139,107,67,.3); outline:1px solid rgba(139,107,67,.45); outline-offset:-6px; }
+:root[data-theme='atlas'] aside { background-color: rgba(207,229,232,.55); border-right:1px solid #8b6b43; }
+:root[data-theme='atlas'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 2px; }
+:root[data-theme='atlas'] input { color: #3b2f1e; }
+:root[data-theme='atlas'] input::placeholder { color: #8a7656; }
+:root[data-theme='atlas'] [class*='border-red'] { border-color: #b5451d; background-color: rgba(181,69,29,.1); }
+:root[data-theme='atlas'] [class*='text-red'] { color: #8c2f10; }
+:root[data-theme='atlas'] :is(button, input):focus-visible { --tw-ring-color: rgba(31,122,140,.7); }
+:root[data-theme='atlas'] .text-amber-300 { color: #b5651d; }
+:root[data-theme='atlas'] .text-sky-300 { color: #1f7a8c; }
+:root[data-theme='atlas'] .text-indigo-200 { color: #1f5f8b; }
+:root[data-theme='atlas'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#1f7a8c,#d6b25e,#b5651d); }
+:root[data-theme='atlas'] .wx-tiles { filter: sepia(.35) saturate(.9) brightness(1.02); }
+:root[data-theme='atlas'] .leaflet-container { background: #dbe9e8; }
+:root[data-theme='atlas'] .wx-pin__label { border-radius:2px; border:1px solid #8b6b43; background:#faf4e6; color:#3b2f1e; box-shadow:0 2px 6px rgba(59,47,30,.3); }
+:root[data-theme='atlas'] .wx-pin__cond { color: #8a7656; }
+:root[data-theme='atlas'] .wx-pin__dot { border-color:#1f7a8c; box-shadow:none; }
+:root[data-theme='atlas'] .wx-pin--selected .wx-pin__label { background:#1f7a8c; color:#fff; border-color:#fff; }
+:root[data-theme='atlas'] .wx-pin--selected .wx-pin__cond { color: #e6f4f6; }
+:root[data-theme='atlas'] [class~='shadow-lg'] { box-shadow: 0 2px 8px rgba(59,47,30,.25); }
+:root[data-theme='atlas'] [class~='rounded-full'][class*='border-white'] { border-radius: 2px; }
+
+/* Retro Weatherstar: 90s cable weather channel, blue beveled panels */
+:root[data-theme='weatherstar'] { --app-bg: linear-gradient(180deg,#2a56c6 0%,#1a3a8f 45%,#0d2063 100%); }
+:root[data-theme='weatherstar'] body { color: #fff; font-family: 'VT323', 'Courier New', monospace; text-shadow:2px 2px 0 #000; letter-spacing:.02em; }
+:root[data-theme='weatherstar'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: inherit; color:#ffe94d; }
+:root[data-theme='weatherstar'] [class*='uppercase'] { color:#6ee7f7; }
+:root[data-theme='weatherstar'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: #1d44a8; }
+:root[data-theme='weatherstar'] [class~='bg-white/20'] { background-color: #2a5fd6; }
+:root[data-theme='weatherstar'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(0,0,40,.35); }
+:root[data-theme='weatherstar'] [class*=' bg-white/90'] { background-color: #ffe94d; color: #0d2063; }
+:root[data-theme='weatherstar'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: rgba(255,255,255,.7); }
+:root[data-theme='weatherstar'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='weatherstar'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: #9db9ff; }
+:root[data-theme='weatherstar'] [class~='rounded-2xl'] { border-radius: 0; border-style: solid; border-width: 2px; box-shadow: none; border-width:2px; border-style:solid; border-color:#9db9ff #0a1a52 #0a1a52 #9db9ff; background-image:linear-gradient(180deg,#2a5fd6,#13347f); }
+:root[data-theme='weatherstar'] aside { background-color: rgba(6,16,70,.7); border-right:3px solid #9db9ff; }
+:root[data-theme='weatherstar'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 0; }
+:root[data-theme='weatherstar'] input { color: #fff; }
+:root[data-theme='weatherstar'] input::placeholder { color: #9db9ff; }
+:root[data-theme='weatherstar'] [class*='border-red'] { border-color: #ff6b6b; background-color: rgba(255,60,60,.25); }
+:root[data-theme='weatherstar'] [class*='text-red'] { color: #ffd0d0; }
+:root[data-theme='weatherstar'] :is(button, input):focus-visible { --tw-ring-color: #ffe94d; }
+:root[data-theme='weatherstar'] .text-amber-300 { color: #ffe94d; }
+:root[data-theme='weatherstar'] .text-sky-300 { color: #6ee7f7; }
+:root[data-theme='weatherstar'] .text-indigo-200 { color: #c7d2fe; }
+:root[data-theme='weatherstar'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#6ee7f7,#ffe94d,#ff9e4d); }
+:root[data-theme='weatherstar'] .wx-tiles { filter: saturate(.7) contrast(1.1) hue-rotate(-20deg) brightness(.85); }
+:root[data-theme='weatherstar'] .leaflet-container { background: #0d2063; }
+:root[data-theme='weatherstar'] .wx-pin__label { border-radius:0; border:2px solid #9db9ff; background:#13347f; font-family:"VT323",monospace; font-size:15px; box-shadow:2px 2px 0 #000; }
+:root[data-theme='weatherstar'] .wx-pin__cond { color: rgba(255,255,255,.75); }
+:root[data-theme='weatherstar'] .wx-pin__dot { border-color:#ffe94d; box-shadow:none; }
+:root[data-theme='weatherstar'] .wx-pin--selected .wx-pin__label { background:#ffe94d; color:#0d2063; border-color:#fff; }
+:root[data-theme='weatherstar'] .wx-pin--selected .wx-pin__cond { color: #0d2063; }
+:root[data-theme='weatherstar'] [class~='p-4'] { padding: .75rem; }
+:root[data-theme='weatherstar'] [class~='py-3'] { padding-top: .5rem; padding-bottom: .5rem; }
+:root[data-theme='weatherstar'] [class~='py-4'] { padding-top: .75rem; padding-bottom: .75rem; }
+:root[data-theme='weatherstar'] [class~='px-4'] { padding-left: .875rem; padding-right: .875rem; }
+:root[data-theme='weatherstar'] main [class~='gap-3'] { gap: .625rem; }
+:root[data-theme='weatherstar'] { font-size: 18px; }
+:root[data-theme='weatherstar'] [class*='text-white']:not([class*='bg-black']):not(h1):not([class*='text-[6.5rem]']) { color: #fff; }
+:root[data-theme='weatherstar'] :is(h1, [class*='text-[6.5rem]']) { color: #ffe94d; }
+:root[data-theme='weatherstar'] [class~='font-extralight'], :root[data-theme='weatherstar'] [class~='font-light'] { font-weight: 400; }
+:root[data-theme='weatherstar'] [class~='rounded-2xl'][class~='shadow-lg'] { background-image: linear-gradient(180deg,#3a74f0,#1d44a8); }
+:root[data-theme='weatherstar'] [class~='rounded-full'][class*='border-white'] { border-radius:0; border-width:2px; border-style:solid; border-color:#9db9ff #0a1a52 #0a1a52 #9db9ff; }
+
+/* Zen Ink: rice paper, sumi black, one vermilion accent, very spacious */
+:root[data-theme='zen'] { --app-bg: radial-gradient(80% 50% at 50% 0%, rgba(255,255,255,.7) 0%, transparent 70%), #f6f3ec; }
+:root[data-theme='zen'] body { color: #1a1a1a; font-family: 'Inter', system-ui, sans-serif; line-height:1.75; font-weight:300; }
+:root[data-theme='zen'] :is(h1, [class*='text-4xl'], [class*='text-3xl'], [class*='text-2xl'], [class*='text-[6.5rem]']) { font-family: 'Noto Serif JP', 'Noto Serif', serif; font-weight:300; }
+:root[data-theme='zen'] [class*='text-white']:not([class*='bg-black']) { color: #1a1a1a; }
+:root[data-theme='zen'] :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) { color: #8a867c; }
+:root[data-theme='zen'] [class*='text-white/7']:not([class*='bg-black']) { color: #55524a; }
+:root[data-theme='zen'] [class*='uppercase'] { color:#8a867c; letter-spacing:.2em; font-weight:400; }
+:root[data-theme='zen'] :is([class*=' bg-white/'], [class^='bg-white/']) { background-color: transparent; }
+:root[data-theme='zen'] [class~='bg-white/20'] { background-color: rgba(26,26,26,.05); }
+:root[data-theme='zen'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) { background-color: rgba(26,26,26,.06); }
+:root[data-theme='zen'] [class*=' bg-white/90'] { background-color: #d8412f; color: #fff; }
+:root[data-theme='zen'] :is([class*=' bg-white/70'], [class~='bg-white']) { background-color: #d8412f; }
+:root[data-theme='zen'] [class*='backdrop-blur'] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme='zen'] :is([class*='border-white'], [class*='divide-white'] > *) { border-color: rgba(26,26,26,.22); }
+:root[data-theme='zen'] [class~='rounded-2xl'] { border-radius: 0; border-style: solid; border-width: 0px; box-shadow: none; border-bottom:1px solid rgba(26,26,26,.2); padding-left:2rem; }
+:root[data-theme='zen'] aside { background-color: rgba(255,255,255,.45); border-right:1px solid rgba(26,26,26,.12); }
+:root[data-theme='zen'] :is([class~='rounded-lg'], [class~='rounded-md']) { border-radius: 2px; }
+:root[data-theme='zen'] input { color: #1a1a1a; }
+:root[data-theme='zen'] input::placeholder { color: #8a867c; }
+:root[data-theme='zen'] [class*='border-red'] { border-color: #d8412f; background-color: rgba(216,65,47,.07); }
+:root[data-theme='zen'] [class*='text-red'] { color: #b0301f; }
+:root[data-theme='zen'] :is(button, input):focus-visible { --tw-ring-color: rgba(216,65,47,.6); }
+:root[data-theme='zen'] .text-amber-300 { color: #d8412f; }
+:root[data-theme='zen'] .text-sky-300 { color: #1a1a1a; }
+:root[data-theme='zen'] .text-indigo-200 { color: #1a1a1a; }
+:root[data-theme='zen'] [class*='from-sky-300'] { background-image: linear-gradient(to right,#1a1a1a,#8a867c,#d8412f); }
+:root[data-theme='zen'] .wx-tiles { filter: grayscale(1) contrast(.9) brightness(1.08); }
+:root[data-theme='zen'] .leaflet-container { background: #ece8de; }
+:root[data-theme='zen'] .wx-pin__label { border-radius:0; border:1px solid #1a1a1a; background:#f6f3ec; color:#1a1a1a; box-shadow:none; }
+:root[data-theme='zen'] .wx-pin__cond { color: #8a867c; }
+:root[data-theme='zen'] .wx-pin__dot { border-color:#d8412f; box-shadow:none; }
+:root[data-theme='zen'] .wx-pin--selected .wx-pin__label { background:#1a1a1a; color:#f6f3ec; }
+:root[data-theme='zen'] .wx-pin--selected .wx-pin__cond { color: #d6d2c8; }
+:root[data-theme='zen'] [class~='p-4'] { padding: 1.75rem 1.25rem 1.75rem 2rem; }
+:root[data-theme='zen'] [class~='py-3'] { padding-top: 1.125rem; padding-bottom: 1.125rem; }
+:root[data-theme='zen'] [class~='py-4'] { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+:root[data-theme='zen'] [class~='px-4'] { padding-left: 1.5rem; padding-right: 1.5rem; }
+:root[data-theme='zen'] main [class~='gap-3'] { gap: 1.75rem; }
+:root[data-theme='zen'] [class~='shadow-lg'] { box-shadow:none; border-left: 2px solid #d8412f; }
+:root[data-theme='zen'] [class*='text-[6.5rem]'] { font-weight: 200; }
+:root[data-theme='zen'] [class~='rounded-full'][class*='border-white'] { border-width:1px; border-color:#1a1a1a; border-radius:0; }
+:root[data-theme='zen'] [class*='border-b'][class*='border-white'] { border-bottom-width:1px; border-bottom-style:solid; }
+
+
+body {
+  @apply text-white antialiased;
+  background: var(--app-bg);
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
@@ -40,4 +865,75 @@ input:focus-visible {
 
 ::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* Weather map pins (Leaflet divIcon) */
+.wx-pin-wrapper {
+  background: none;
+  border: none;
+}
+
+.wx-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 120px;
+  height: 56px;
+}
+
+.wx-pin__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 120px;
+  padding: 3px 10px 4px;
+  border-radius: 12px;
+  background: rgba(20, 28, 40, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  line-height: 1.1;
+}
+
+.wx-pin__temp {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.wx-pin__cond {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.wx-pin__dot {
+  width: 12px;
+  height: 12px;
+  margin-top: 4px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #4fa3ff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.wx-pin--selected .wx-pin__label {
+  background: rgba(79, 163, 255, 0.9);
+  border-color: #fff;
+}
+
+.wx-pin--selected .wx-pin__cond {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Darken standard OSM tiles to match the glass UI (pins live in a separate pane, unaffected) */
+.wx-tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6);
+}
+
+.leaflet-container {
+  background: #1c2530;
 }

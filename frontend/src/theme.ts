@@ -16,6 +16,8 @@ export const THEMES = [
   { id: 'atlas', label: 'Isometric Atlas' },
   { id: 'weatherstar', label: 'Retro Weatherstar' },
   { id: 'zen', label: 'Zen Ink' },
+  { id: 'monsoon', label: 'Monsoon Teal' },
+  { id: 'tropical', label: 'Tropical Punch' },
 ] as const;
 
 export type ThemeId = (typeof THEMES)[number]['id'];

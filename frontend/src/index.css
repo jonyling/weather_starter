@@ -937,3 +937,178 @@ input:focus-visible {
 .leaflet-container {
   background: #1c2530;
 }
+
+/* Monsoon Teal: deep teal and slate with a faint rain-streak texture and cool white text.
+   Keeps the white-on-glass utility classes and remaps surfaces to teal-tinted panels.
+   Scoped to this theme only. */
+:root[data-theme='monsoon'] {
+  --app-bg:
+    repeating-linear-gradient(
+      105deg,
+      transparent 0 14px,
+      rgba(190, 235, 235, 0.045) 14px 15px,
+      transparent 15px 31px,
+      rgba(190, 235, 235, 0.03) 31px 32px
+    ),
+    radial-gradient(80% 55% at 80% 0%, rgba(45, 212, 191, 0.2) 0%, transparent 70%),
+    linear-gradient(170deg, #0f3d44 0%, #0c2f38 45%, #14232e 100%);
+}
+:root[data-theme='monsoon'] body {
+  color: #e6f4f3;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+:root[data-theme='monsoon'] :is([class*=' bg-white/'], [class^='bg-white/']) {
+  background-color: rgba(10, 44, 52, 0.6);
+}
+:root[data-theme='monsoon'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) {
+  background-color: rgba(45, 212, 191, 0.09);
+}
+:root[data-theme='monsoon'] [class~='bg-white/20'] {
+  background-color: rgba(45, 212, 191, 0.2);
+}
+:root[data-theme='monsoon'] [class*=' bg-white/90'] {
+  background-color: #5eead4;
+  color: #062a2e;
+}
+:root[data-theme='monsoon'] [class*=' bg-white/70'] {
+  background-color: #99f6e4;
+}
+:root[data-theme='monsoon'] [class~='rounded-2xl'] {
+  box-shadow: 0 6px 22px rgba(2, 20, 26, 0.35);
+}
+:root[data-theme='monsoon'] [class*='border-white'],
+:root[data-theme='monsoon'] [class*='divide-white'] > * {
+  border-color: rgba(153, 246, 228, 0.2);
+}
+:root[data-theme='monsoon'] aside {
+  background-color: rgba(6, 28, 34, 0.55);
+  border-color: rgba(153, 246, 228, 0.16);
+}
+:root[data-theme='monsoon'] [class*='uppercase'] {
+  color: #7fe3d6;
+  letter-spacing: 0.12em;
+}
+:root[data-theme='monsoon'] button:focus-visible,
+:root[data-theme='monsoon'] input:focus-visible {
+  --tw-ring-color: rgba(94, 234, 212, 0.7);
+}
+/* map pins */
+:root[data-theme='monsoon'] .wx-pin__label {
+  border-color: rgba(94, 234, 212, 0.55);
+  background: rgba(8, 36, 42, 0.92);
+}
+:root[data-theme='monsoon'] .wx-pin__dot {
+  border-color: #5eead4;
+  box-shadow: 0 0 8px rgba(94, 234, 212, 0.8);
+}
+:root[data-theme='monsoon'] .wx-pin--selected .wx-pin__label {
+  background: rgba(94, 234, 212, 0.9);
+  color: #062a2e;
+}
+
+/* Tropical Punch: saturated coral, mango and palm green with rounded, playful cards.
+   Light theme: text is remapped to deep palm green. Scoped to this theme only. */
+:root[data-theme='tropical'] {
+  --app-bg:
+    radial-gradient(60% 45% at 90% 0%, rgba(255, 190, 60, 0.7) 0%, transparent 70%),
+    radial-gradient(55% 40% at 0% 100%, rgba(34, 160, 100, 0.35) 0%, transparent 70%),
+    linear-gradient(165deg, #ff8a6b 0%, #ffb36b 50%, #ffe7a8 100%);
+}
+:root[data-theme='tropical'] body {
+  color: #123d2a;
+  font-family: 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+:root[data-theme='tropical'] [class*='text-white']:not([class*='bg-black']) {
+  color: #123d2a;
+}
+:root[data-theme='tropical']
+  :is([class*='text-white/4'], [class*='text-white/5'], [class*='text-white/6']):not([class*='bg-black']) {
+  color: #4a6b4f;
+}
+:root[data-theme='tropical'] [class*='text-white/7']:not([class*='bg-black']) {
+  color: #2b5238;
+}
+:root[data-theme='tropical'] :is([class*=' bg-white/'], [class^='bg-white/']) {
+  background-color: rgba(255, 252, 240, 0.8);
+}
+:root[data-theme='tropical'] :is([class*=' bg-white/10'], [class*=' bg-white/[0.04]']) {
+  background-color: rgba(255, 252, 240, 0.62);
+}
+:root[data-theme='tropical'] [class~='bg-white/20'] {
+  background-color: #ffd9a0;
+}
+:root[data-theme='tropical'] [class*=' bg-white/90'] {
+  background-color: #12924f;
+  color: #fff;
+}
+:root[data-theme='tropical'] [class*=' bg-white/70'] {
+  background-color: #0e6b3c;
+}
+:root[data-theme='tropical'] [class~='rounded-2xl'] {
+  border-radius: 26px;
+  box-shadow: 0 8px 22px rgba(214, 70, 50, 0.25);
+}
+:root[data-theme='tropical'] :is([class~='rounded-lg'], [class~='rounded-md'], [class~='rounded-xl']) {
+  border-radius: 16px;
+}
+:root[data-theme='tropical'] aside {
+  background-color: rgba(255, 244, 214, 0.5);
+  border-color: rgba(214, 70, 50, 0.25);
+}
+:root[data-theme='tropical'] [class*='border-white'],
+:root[data-theme='tropical'] [class*='divide-white'] > * {
+  border-color: rgba(214, 70, 50, 0.28);
+}
+:root[data-theme='tropical'] [class*='uppercase'] {
+  color: #d9402a;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+:root[data-theme='tropical'] input {
+  color: #123d2a;
+}
+:root[data-theme='tropical'] input::placeholder {
+  color: #4a6b4f;
+}
+:root[data-theme='tropical'] [class*='border-red'] {
+  border-color: #c62828;
+  background-color: #ffe1dc;
+}
+:root[data-theme='tropical'] [class*='text-red'] {
+  color: #b71c1c;
+}
+:root[data-theme='tropical'] .text-amber-300 {
+  color: #e08400;
+}
+:root[data-theme='tropical'] .text-sky-300 {
+  color: #0a86b8;
+}
+:root[data-theme='tropical'] .text-indigo-200 {
+  color: #8a3fb0;
+}
+:root[data-theme='tropical'] button:focus-visible,
+:root[data-theme='tropical'] input:focus-visible {
+  --tw-ring-color: rgba(18, 146, 79, 0.7);
+}
+:root[data-theme='tropical'] .wx-tiles {
+  filter: saturate(1.2) sepia(0.12);
+}
+:root[data-theme='tropical'] .leaflet-container {
+  background: #ffe7a8;
+}
+/* map pins */
+:root[data-theme='tropical'] .wx-pin__label {
+  border-color: #ff6b4a;
+  background: rgba(255, 250, 235, 0.95);
+  color: #123d2a;
+  border-radius: 14px;
+}
+:root[data-theme='tropical'] .wx-pin__dot {
+  border-color: #ff6b4a;
+  box-shadow: 0 0 6px rgba(255, 107, 74, 0.7);
+}
+:root[data-theme='tropical'] .wx-pin--selected .wx-pin__label {
+  background: #12924f;
+  border-color: #12924f;
+  color: #fff;
+}

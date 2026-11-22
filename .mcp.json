@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "sqlite": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "mcp-sqlite",
+        "/home/jonyling/AIxTech/weather_starter/backend/weather.db"
+      ],
+      "env": {}
+    }
+  }
+}

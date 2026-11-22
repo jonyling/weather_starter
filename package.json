@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "format": "prettier --write \"backend/src/**/*.{ts,tsx}\" \"frontend/src/**/*.{ts,tsx,css}\" \"scripts/**/*.mjs\" \"*.{ts,json}\""
   },
   "workspaces": [
     "frontend",
@@ -34,7 +35,7 @@
     "@types/leaflet": "^1.9.21",
     "@types/node": "^22.10.2",
     "@types/supertest": "^7.2.0",
-    "drizzle-kit": "^0.31.10",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
@@ -45,7 +46,7 @@
     "supertest": "^7.2.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.59.2",
+    "typescript-eslint": "^8.36.0",
     "vitest": "^4.1.5"
   },
   "allowScripts": {

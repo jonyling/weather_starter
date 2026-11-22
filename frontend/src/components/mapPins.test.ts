@@ -2,7 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { escapeHtml, mapView, pinHtml, pinLabel } from './mapPins';
 import type { Location } from '../types';
 
-function loc(id: number, over: Partial<Location['weather']> = {}, lat = 1.3, lng = 103.8): Location {
+function loc(
+  id: number,
+  over: Partial<Location['weather']> = {},
+  lat = 1.3,
+  lng = 103.8,
+): Location {
   return {
     id,
     latitude: lat,
@@ -53,6 +58,12 @@ describe('mapView', () => {
   });
   it('fits bounds for several locations', () => {
     const v = mapView([loc(1), loc(2, {}, 1.4, 103.9)]);
-    expect(v).toEqual({ kind: 'bounds', points: [[1.3, 103.8], [1.4, 103.9]] });
+    expect(v).toEqual({
+      kind: 'bounds',
+      points: [
+        [1.3, 103.8],
+        [1.4, 103.9],
+      ],
+    });
   });
 });

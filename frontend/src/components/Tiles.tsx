@@ -102,7 +102,11 @@ export function ConditionTile({ weather }: WeatherProps) {
   const updated = formatTime(weather?.observed_at);
 
   return (
-    <TileShell icon={<CloudIcon className="h-3.5 w-3.5" />} title="Conditions" className="col-span-2">
+    <TileShell
+      icon={<CloudIcon className="h-3.5 w-3.5" />}
+      title="Conditions"
+      className="col-span-2"
+    >
       <div className="flex items-center gap-4">
         <ConditionIcon condition={available ? condition : null} />
         <div className="min-w-0">

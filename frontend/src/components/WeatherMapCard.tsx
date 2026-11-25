@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { logInteraction } from '../api';
+import { mapClickAddLocation } from '../mapClickAddLocation';
 import { useStore } from '../state/store';
 import { CloseIcon, LocationIcon } from './icons';
 import { DEFAULT_CENTER, mapView, pinHtml } from './mapPins';
@@ -40,12 +42,35 @@ function FitToLocations({ locations, padding }: { locations: Location[]; padding
   return null;
 }
 
+function MapClickToAdd({
+  enabled,
+  onMapClick,
+}: {
+  enabled: boolean;
+  onMapClick: (latitude: number, longitude: number) => void;
+}) {
+  useMapEvents({
+    click(event) {
+      if (!enabled) return;
+      onMapClick(event.latlng.lat, event.latlng.lng);
+    },
+  });
+  return null;
+}
+
 interface WeatherMapProps {
   interactive: boolean;
   onPinClick?: (id: number) => void;
+  onMapClick?: (latitude: number, longitude: number) => void;
+  clickToAddEnabled?: boolean;
 }
 
-function WeatherMap({ interactive, onPinClick }: WeatherMapProps) {
+function WeatherMap({
+  interactive,
+  onPinClick,
+  onMapClick,
+  clickToAddEnabled = false,
+}: WeatherMapProps) {
   const { locations, selectedId } = useStore();
   const pins = useMemo(
     () => locations.map((l) => ({ location: l, icon: pinIcon(l, l.id === selectedId) })),
@@ -59,15 +84,18 @@ function WeatherMap({ interactive, onPinClick }: WeatherMapProps) {
       zoomControl={interactive}
       dragging={interactive}
       scrollWheelZoom={interactive}
-      doubleClickZoom={interactive}
+      doubleClickZoom={interactive && !clickToAddEnabled}
       touchZoom={interactive}
       boxZoom={interactive}
       keyboard={interactive}
       attributionControl={interactive}
-      className="h-full w-full"
+      className={`h-full w-full${clickToAddEnabled ? ' cursor-crosshair' : ''}`}
     >
       <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} className="wx-tiles" maxZoom={19} />
       <FitToLocations locations={locations} padding={interactive ? 80 : 30} />
+      {onMapClick && (
+        <MapClickToAdd enabled={clickToAddEnabled} onMapClick={onMapClick} />
+      )}
       {pins.map(({ location, icon }) => (
         <Marker
           key={location.id}
@@ -101,8 +129,10 @@ function ExpandIcon({ className = 'h-3.5 w-3.5' }: { className?: string }) {
 }
 
 export function WeatherMapCard() {
-  const { locations, select } = useStore();
+  const { locations, select, create } = useStore();
   const [expanded, setExpanded] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!expanded) return;
@@ -117,6 +147,28 @@ export function WeatherMapCard() {
       document.body.style.overflow = previousOverflow;
     };
   }, [expanded]);
+
+  useEffect(() => {
+    if (!expanded) {
+      setMapError(null);
+      setAdding(false);
+    }
+  }, [expanded]);
+
+  const onMapClickAdd = async (latitude: number, longitude: number) => {
+    if (adding) return;
+    setAdding(true);
+    setMapError(null);
+    try {
+      const result = await mapClickAddLocation(
+        { latitude, longitude },
+        { create, locations, select, logInteraction },
+      );
+      if (!result.ok) setMapError(result.error);
+    } finally {
+      setAdding(false);
+    }
+  };
 
   return (
     <>
@@ -151,12 +203,31 @@ export function WeatherMapCard() {
             aria-label="Weather map"
             className="fixed inset-0 z-[2000] isolate bg-[#1c2530]"
           >
-            <WeatherMap interactive onPinClick={select} />
+            <WeatherMap
+              interactive
+              onPinClick={select}
+              onMapClick={onMapClickAdd}
+              clickToAddEnabled={!adding}
+            />
+            <div className="pointer-events-none absolute left-4 right-16 top-4 z-[1000] flex flex-col gap-2">
+              <p className="w-fit rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur">
+                {adding ? 'Adding location…' : 'Click the map to add a location'}
+              </p>
+              {mapError && (
+                <p
+                  role="alert"
+                  className="w-fit max-w-md rounded-md border border-red-300/30 bg-red-500/20 px-2.5 py-1.5 text-xs text-red-100 backdrop-blur"
+                >
+                  {mapError}
+                </p>
+              )}
+            </div>
             <button
               type="button"
               onClick={() => setExpanded(false)}
               aria-label="Close fullscreen map"
-              className="absolute right-4 top-4 z-[1000] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur hover:bg-black/70"
+              disabled={adding}
+              className="absolute right-4 top-4 z-[1000] flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/55 text-white backdrop-blur hover:bg-black/70 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <CloseIcon className="h-4 w-4" />
             </button>

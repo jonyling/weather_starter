@@ -220,7 +220,7 @@ Add a wind and atmosphere section showing wind speed and direction. Display wind
 
 Redesign the app layout and styling. Use polished weather condition cards, meaningful icons, responsive layout, and smooth interaction states. Aim for a modern weather dashboard that still keeps the app's existing workflows obvious.
 
-Add a map card to the dashboard as part of the themed dashboard experience. Show all saved locations as pins with small weather labels above them. The card can expand into a full-screen map view, but users should continue adding locations through the existing add-location flow rather than creating pins directly from the map.
+Add a map card to the dashboard as part of the themed dashboard experience. Show all saved locations as pins with small weather labels above them. The card can expand into a full-screen map view; clicking the expanded map creates a saved location through the same create-location path as manual add and Use my location.
 
 | Layer    | What to do                                                                                                       |
 | -------- | ---------------------------------------------------------------------------------------------------------------- |

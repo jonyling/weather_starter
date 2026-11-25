@@ -12,13 +12,16 @@ export function Hero() {
 
   if (!selected) {
     return (
-      <main className="flex flex-1 flex-col p-10">
-        <div className="flex flex-1 items-center justify-center">
+      <main className="flex flex-1 flex-col overflow-y-auto p-6 lg:p-8">
+        <div className="flex flex-1 flex-col items-center justify-center gap-6 py-10">
           <div className="text-center">
             <p className="text-2xl font-light text-white/85">Select a location</p>
             <p className="mt-2 text-sm text-white/60">
-              Add a Singapore coordinate from the sidebar to see its weather.
+              Add a Singapore coordinate from the sidebar, or expand the map and click to add.
             </p>
+          </div>
+          <div className="w-full max-w-3xl">
+            <WeatherMapCard />
           </div>
         </div>
       </main>
